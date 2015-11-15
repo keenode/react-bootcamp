@@ -3,15 +3,15 @@
  * Application main script.
 */
 
-class HelloWorld {
-    constructor() {
-        console.log('HelloWorld class init.');
+var HelloWorld = React.createClass({
+    render: function () {
+        return (
+            <div>
+                <h1>Hello World</h1>
+                <p>This is some text</p>
+            </div>
+        );
     }
+});
 
-    sayHello() {
-        console.log('Hello!');
-    }
-}
-
-var hello = new HelloWorld();
-hello.sayHello();
+React.render(<HelloWorld />, document.body);

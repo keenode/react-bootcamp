@@ -37,7 +37,7 @@ gulp.task('scripts', function () {
             }
         }))
         .pipe(useSourcemaps ? sourcemaps.init() : gutil.noop())
-        .pipe(useES6 ? babel({ ignore: config.appDir.scripts + '/vendor/*' }) : gutil.noop())
+        .pipe(useES6 ? babel({ ignore: config.appDir.scripts + '/vendor/*', presets: [ 'react' ] }) : gutil.noop())
         .pipe(canStripDebug ? stripDebug() : gutil.noop())
         .pipe(canUglify ? uglify() : gutil.noop())
         .pipe(useSourcemaps ? sourcemaps.write('sourcemaps') : gutil.noop())
