@@ -3,47 +3,25 @@
  * Application main script.
 */
 
-/** 4. Checkbox **/
-// var Checkbox = React.createClass({
-//     getInitialState: function () {
-//         return { checked: true };
-//     },
-//     handleCheck: function () {
-//         this.setState({ checked: !this.state.checked });
-//     },
-//     render: function () {
-//         var msg;
-//         if(this.state.checked) {
-//             msg = 'checked';
-//         }
-//         else {
-//             msg = 'unchecked';
-//         }
-//         return (
-//             <div>
-//                 <input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.checked} />
-//                 <p>This box is {msg}.</p>
-//             </div>
-//         );
-//     }
-// });
-
-// React.render(<Checkbox />,
-//     document.getElementById('react-container'));
-
-/** 3. Note App **/
+/** 4. Note App **/
 var Note = React.createClass({
     getInitialState: function () {
         return {
             editing: false
         }
     },
+    /**
+        'componentWillMount' is called right before the 'render' method
+    */
     componentWillMount: function () {
         this.style = {
             right: this.randomBetween(0, window.innerWidth - 150) + 'px',
             top: this.randomBetween(0, window.innerHeight - 150) + 'px',
             transform: 'rotate(' + this.randomBetween(-15, 15) + 'deg)'
         };
+    },
+    componentDidMount: function () {
+        $(this.getDOMNode()).draggable();
     },
     randomBetween: function (min, max) {
         return (min + Math.ceil(Math.random() * max));
@@ -107,6 +85,16 @@ var Board = React.createClass({
         this.uniqueId = this.uniqueId || 0;
         return this.uniqueId++;
     },
+    componentWillMount: function () {
+        var self = this;
+        if(this.props.count) {
+            $.getJSON('http://baconipsum.com/api/?type=all-meat&sentences=' + this.props.count + '&start-with-lorem=1&callback=?', function (results) {
+                results[0].split('. ').forEach(function (sentence) {
+                    self.add(sentence.substring(0, 40));
+                });
+            });
+        }
+    },
     add: function (text) {
         var arr = this.state.notes;
         arr.push({
@@ -143,8 +131,36 @@ var Board = React.createClass({
     }
 });
 
-React.render(<Board count={10} />,
+React.render(<Board count={50} />,
     document.getElementById('react-container'));
+
+/** 3. Checkbox **/
+// var Checkbox = React.createClass({
+//     getInitialState: function () {
+//         return { checked: true };
+//     },
+//     handleCheck: function () {
+//         this.setState({ checked: !this.state.checked });
+//     },
+//     render: function () {
+//         var msg;
+//         if(this.state.checked) {
+//             msg = 'checked';
+//         }
+//         else {
+//             msg = 'unchecked';
+//         }
+//         return (
+//             <div>
+//                 <input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.checked} />
+//                 <p>This box is {msg}.</p>
+//             </div>
+//         );
+//     }
+// });
+
+// React.render(<Checkbox />,
+//     document.getElementById('react-container'));
 
 /** 2. React Components **/
 // var MyComponent = React.createClass({
